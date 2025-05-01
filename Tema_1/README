@@ -1,0 +1,85 @@
+Costache Ovidiu-Stefan - 313CC
+
+Tema implementeaza un simulator de browser, care gestioneaza lucrul cu tab-uri
+si navigarea prin istoricul paginilor. Browser-ul include functionalitati
+pentru schimbarea tab-urilor, deschiderea si inchiderea paginilor, navigarea
+prin istoric folosind BACKWARD si FORWARD.
+
+Structurile de date utilizate sunt:
+Page --> pagina web (campurile id, url, description)
+Stack --> istoricul paginilor vizitate stocat in stive
+Tab --> contine pagina curenta si istoricul navigarii
+TabList --> lista circulara dublu inlantuita cu santinela, pentru gestionarea
+          tab-urilor
+Browser --> structura principala care contine tab-urile si istoricul
+
+Gestionarea tab-urilor se face prin:
+NEW_TAB --> genereaza un nou ID pentru tab si incrementeaza last_id. Aloca
+	    memorie pentru noul tab, initializeaza pagina implicita pentru
+	    tabul nou, aloca doua stive, pentru a naviga prin istoric, creaaza
+	    un nod pentru tab-ul nou si il adauga in lista circulara, legandu-l
+	    de nodul santinela. Tab-ul nou devine cel curent, iar browser-ul se
+	    actualizeaza.
+CLOSE --> verifica daca tab-ul curent este cel implicit, iar in caz afirmativ
+	  afiseaza mesaj de eroare. Parcurge lista circulara si identifica nodul
+	  corespunzator tab-ului curent. Actualizeaza legaturile, elimina nodul
+	  tab-ului din lista dublu inlantuita si elibereaza memoria pentru
+	  tab-ul sters.
+OPEN <ID> --> verifica daca browser-ul este valid, parcurge lista de tab-uri, 
+	      porneste de la primul tab de dupa nodul santinela, cauta tab-ul
+	      cu acelasi ID ca cel dat ca parametru. Daca tab-ul este gasit, se 
+	      actualizeaza b->current. Daca tab-ul nu exista, se afiseaza mesaj
+	      de eroare.
+NEXT --> parcurge lista de tab-uri pentru a gasi tab-ul curent, muta tab-ul curent
+	 la urmatorul din lista, iar daca acela este nodul santinela, 
+	 sare peste el.
+PREV --> parcurge lista de tab-uri pentru a gasi tab-ul curent, muta tab-ul curent
+	 la tab-ul anterior, iar daca tab-ul anterior este nodul santinela, sare
+	 peste el.
+
+Gestionarea paginilor se face prin:
+PAGE <ID> --> cauta pagina in vectorul de pagini si identifica ID-ul specificat.
+	      Daca pagina nu este gasita, se afiseaza mesaj de eroare. Salveaza 
+	      pagina curenta in stiva backward pentru a putea reveni la ea.
+	      Elibereaza memoria tuturor paginilor din stiva forward si creeaza
+	      o copie a paginii noi, pe care o seteaza ca pagina curenta.
+	      Folosirea unei copii evita eliberarea aceleiasi zone de memorie
+	      de mai multe ori.
+BACKWARD --> daca stiva este goala, se afiseaza mesaj de eroare. Muta pagina
+	     curenta in stiva forward si seteaza ultima pagina din stiva backward
+	     ca pagina curenta.
+FORWARD --> functioneaza invers fata de BACKWARD, pentru ca muta pagina curenta
+	    din stiva forward in stiva backward.
+PRINT --> gaseste tab-ul curent din lista de tab-uri, parcurge lista circulara si
+	  afiseaza ID-urile, apoi afiseaza descrierea paginii curente a tab-ului
+	  curent.
+PRINT_HISTORY <ID> --> afiseaza istoricul paginilor vizitate in tab-ul cu ID-ul
+                       precizat, incepand cu cele din stiva FORWARD, continuand
+                       cu pagina curenta si paginile din stiva BACKWARD
+
+Structura codului:
+Codul este organizat in asa fel incat operatiile importante sa fie separate
+in functii distincte, fiecare avand un singur scop.
+1) Crearea si gestionarea structurilor:
+    create_page(), create_stack(), create_tab(), create_browser()
+    Functiile aloca memorie si initializeaza structurile de baza.
+2) Gestionarea tab-urilor:
+    NEW_TAB(), CLOSE(), OPEN(), NEXT(), PREV()
+    Permit deschiderea, inchiderea si navigarea intre tab-uri.
+3) Navigarea intre pagini:
+    PAGE(), BACKWARD(), FORWARD()
+    Permit schimbarea paginilor si navigarea prin istoricul unui tab.
+4) Afisarea informatiilor:
+    PRINT(), PRINT_HISTORY()
+    Afiseaza tab-urile disponibile si istoricul de navigare.
+5) Gestionarea memoriei:
+    free_page(), free_stack(), free_tab(), free_browser()
+    Asigura eliberarea completa a memoriei pentru a evita scurgerile de memorie.
+6) Executarea programului:
+    main(), input()
+    Citesc input-ul, proceseaza comenzile si ruleaza simulatorul de browser.
+
+La rularea pe calculatorul propriu obtin urmatorul punctaj:
+-= TEMA 1 SDA =-
+Total: 100/100
+Valgrind: 20/20
