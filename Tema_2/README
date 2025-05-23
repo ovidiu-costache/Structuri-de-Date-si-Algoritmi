@@ -1,0 +1,81 @@
+Costache Ovidiu-Stefan - 313CC
+
+Tema 2 - Arbori
+
+Tema implementeaza o retea de sateliti organizata sub forma unui arbore binar.
+Pentru constructia acestui arobre se foloseste un min-heap. Mai jos prezint mai
+detaliat modul in care am rezolvat tema, pe baza codului implementat.
+
+Structurile de date utilizate:
+- Nod:
+      - fiecare nod reprezinta un satelit si este definit prin frecventa, nume,
+        pointeri la fiul stang si cel drept, dar si pointer catre nodul parinte
+        pentru a simplifica rezolvarea cerintei 3;
+- Heap:
+       - este folosita pentru a gestiona nodurile in timpul constructiei arborelui
+         si contine un vector de pointeri la Nod, numarul curent de elemente si
+         capacitatea maxima a vectorului;
+
+Functii pentru construirea arborelui:
+- creareNod:
+            - aloca memorie pentru un nod, initializeaza campurile si returneaza
+              nodul. Am verificat alocarile folosind mesaje de eroare;
+- creareHeap ( + operatiile pe heap):
+            - am creat un min-heap pentru constructia arborelui. Functia creareHeap
+              aloca un vector de pointeri in functie de capacitatea initiala.
+              Functiile shiftUp si minHeapify se asigura ca proprietatea heap-ului
+              este mentinuta dupa inserare sau extragere. insertHeap insereaza un
+              nod in heap, iar daca numarul de elemente atinge capacitatea, vectorul
+              se redimensioneaza dublandu-l. extrageHeap scoate nodul cu valoare
+              minima (radacina heap-ului) si rearanjeaza heap-ul;
+- creareArbore:
+               - functia insereaza toate nodurile in heap, apoi extrage cate doua
+                 noduri cu frecventa minima, le combina intr-un nod parinte (frecventa
+                 fiind suma celor doua, iar denumirea este obtinuta prin concatenarea
+                 numelor celor doua noduri) si apoi insereaza nodul in heap. Procesul
+                 se reepta pana cand ramane exact un singur nod, care va fi radacina
+                 intregului arbore;
+
+Codificare si Decodificare:
+- codificare:
+             - pentru a determina codul unui satelit, se porneste din nodul frunza
+               si se urca in arbore folosind pointerul catre parinte. Pentru fiecare
+               trecere se adauga '0' daca nodul este fiul stang si '1' daca este fiul
+               drept. La final codul s einverseaza, pentru ca este format in ordine
+               inversa. (Ideea mi-a venit dupa ce am vazut ca a intrebat cineva pe
+               forum daca avem voie cu pounter la nodul parinte);
+- decodificare:
+               - codul primit ca sir de caractere este interpretat caracter cu caracter,
+                 iar pentru fiecare '0' se merge in subarborele stang, iar pentru '1' in
+                 cel drept, pana cand se ajunge la o frunza. Denumirea frunzei este apoi
+                 afisata, iar parcurgerea se reia de la radacina pentru restul codului;
+
+Parcurgerea in latime:
+- afisareBFS:
+             - pentru parcurgerea pe nivel, am implementat o coada de pointeri.
+               Capacitatea este de 2 * nrSateliti - 1, deoarece pentru "n" frunze
+               un arbore binar complet contine 2n - 1 noduri in total;
+
+Determinarea LCA:
+- adancime:
+           - functia calculeaza adancimea unui nod pornind de la acesta pana ajungem
+             la radacina, folosind pointer-ul catre pairnte;
+- LCA:
+      - ajusteaza nodurile "a" si "b" astfel incat sa se afle la aceeasi adancime,
+        api urca simultan pe arbore pana cand se intalnesc. Astfel, se obtine cel
+        mai apropiat stramos comun al celor doua noduri;
+
+Gestionarea cerintelor:
+- am definit functiile cerinta1, cerinta2, cerinta3 si cerinta4 care preiau datele
+  de intrare si apeleaza functiile implementate conform optiunii specificate.
+  Functia main veririca corectitudinea argumentelor si apeleaza functia corespunzatoare
+  pentru rezolvarea cerintei selectate;
+
+La rularea pe propriul calculator obtin urmatorul punctaj:
+Încep rularea testelor cu punctaj și Valgrind...
+======================================
+Scor total: 95.00 puncte din 115.
+(Teste rulate: 84)
+======================================
+
+95 de puncte fara README
